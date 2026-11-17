@@ -309,25 +309,17 @@ export function drawCity(ctx, G, vw, vh) {
     ctx.fill();
   }
 
-  // Landmark labels on the ground, clamped inside the viewport so a label
-  // never clips at the screen edge when its landmark sits near it.
+  // Landmark labels on the ground.
   ctx.font = 'bold 15px system-ui, sans-serif';
   ctx.textAlign = 'center';
-  const vx0 = G.camera.x - vw / 2 / zoom;
-  const vx1 = G.camera.x + vw / 2 / zoom;
-  const vy0 = G.camera.y - vh / 2 / zoom;
-  const vy1 = G.camera.y + vh / 2 / zoom;
   for (const key of Object.keys(G.city.spots)) {
     const s = G.city.spots[key];
     if (s.x < x0 || s.x > x1 || s.y < y0 || s.y > y1) continue;
     if (key === 'bar') continue;
-    const halfW = ctx.measureText(s.label).width / 2 + 6;
-    const lx = clamp(s.x, vx0 + halfW, vx1 - halfW);
-    const ly = clamp(s.y - 14, vy0 + 18, vy1 - 6);
     ctx.lineWidth = 4;
     ctx.strokeStyle = 'rgba(0,0,0,0.55)';
-    ctx.strokeText(s.label, lx, ly);
+    ctx.strokeText(s.label, s.x, s.y - 14);
     ctx.fillStyle = 'rgba(255,255,255,0.9)';
-    ctx.fillText(s.label, lx, ly);
+    ctx.fillText(s.label, s.x, s.y - 14);
   }
 }
